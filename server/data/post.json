@@ -1,0 +1,43 @@
+{
+  "memberId": "XEA123456",
+  "attributes": [
+    {
+      "attributeType": "DOB",
+      "attributeValue": "1961-11-27"
+    },
+    {
+      "attributeType": "BiologicalSex",
+      "attributeValue": "Male"
+    },
+    {
+      "attributeType": "BloodType",
+      "attributeValue": "A+"
+    },
+    {
+      "attributeType": "FitzpatrickSkinType",
+      "attributeValue": "I"
+    },
+    {
+      "attributeType": "WheelchairUse",
+      "attributeValue": "no"
+    }
+  ],
+  "measurements": [
+    {
+      "measurementValue": "113.85",
+      "unitOfMeasure": "Kg",
+      "endDate": "2018-08-02T23:37:00Z",
+      "startDate": "2018-08-02T23:37:00Z",
+      "measurementType": "Weight",
+      "uuid": "BE15F14C-6A1E-463C-89C3-D38743DD3ED0"
+    },
+    {
+      "measurementValue": "1.98",
+      "unitOfMeasure": "M",
+      "endDate": "2018-08-02T18:50:00Z",
+      "startDate": "2018-08-02T18:50:00Z",
+      "measurementType": "Height",
+      "uuid": "413A667E-63F2-40A2-9510-C02C1EAE9D65"
+    }
+  ]
+}
