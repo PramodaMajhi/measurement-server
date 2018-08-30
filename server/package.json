@@ -3,8 +3,7 @@
     "express": "*",
     "cors": "*",
     "nodemon": "*",
-    "body-parser": "*",
-    "redis": "*"
+    "body-parser": "*"
   },
   "scripts": {
     "dev": "nodemon",
