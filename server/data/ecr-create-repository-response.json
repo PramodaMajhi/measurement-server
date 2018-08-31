@@ -1,0 +1,7 @@
+"repository": {
+  "repositoryArn": "arn:aws:ecr:us-east-1:627272263172:repository/measurement-server",
+  "registryId": "627272263172",
+  "repositoryName": "measurement-server",
+  "repositoryUri": "627272263172.dkr.ecr.us-east-1.amazonaws.com/measurement-server",
+  "createdAt": 1535664106.0
+}
