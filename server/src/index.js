@@ -36,7 +36,7 @@ app.post('/healthData', (req, res) => {
     obj[a.attributeType] = a.attributeValue    
   })
   body.measurements.map(m => {
-    const value = {value: m.measurementValue, uom: m.unitOfMeasure}
+    const value = {value: m.measurementValue, uom: m.unitOfMeasure, source: m.source || ""}
     obj[m.measurementType] = value
   })
   res.send(obj)
