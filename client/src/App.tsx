@@ -3,12 +3,14 @@ import TimeAgo from 'react-timeago'
 import * as io from 'socket.io-client'
 import conf from './conf'
 import page from './img/page.png'
+import { Meas } from './Measurement'
 import {IData, IMeasurement} from './models/data'
 
 import './App.css'
 
 const initialState = {
   bmi: 0,
+  changed: new Set<string>(), // the names of the keys that were changed in this state  
   heartRate: 0,
   heartRateSource: '',
   heartRateVariability: 0,
@@ -17,9 +19,9 @@ const initialState = {
   lastRecorded: new Date(),
   peakHeartRate: 0,
   restingHeartRate: 0,
-  sleepDuration: '0',
-  stepCount: 0,
-  weight: 0,
+  sleepHours: '----',
+  stepsCount: 0,
+  weight: 0,  
 }
 
 type State = Readonly<typeof initialState>
@@ -30,16 +32,15 @@ class App extends React.Component<object, State> {
 
   constructor(props: {}) {
     super(props)
-    const socket = io(`http://${conf.host}/`) // uses the scheme, url, port, etc. where the web page was serverd from
+    const socket = io(`http://${conf.host}`)
     socket.on("update", (data: IData) => {
       this.load(data)
     })
   }
 
-  // we could get the initial values using the web socket
-  // (see the server where we send an 'update' message to the socket on connect).
-  // However, in case the web sockets is not working, get the initial data using 
-  // the old-fashioned HTTP Get
+  // When the browser connects to the webSocket, the server sends an update message 
+  // with the latest values. If for some reason it does not work, then use the "sync"
+  // button to fetch from the /values endpoint.
   public componentDidMount() {
     // this.fetch()
   }
@@ -64,20 +65,46 @@ class App extends React.Component<object, State> {
     const weight = this.convertWeight(data.Weight)
     const bmi = this.calcBMI(data.Weight, data.Height)
 
-    this.setState({
+    const newState : any = {
       bmi,
       heartRate: Number(data.HeartRate.value),
       heartRateSource: data.HeartRate.source,
       heartRateVariability: Number(data.HeartRateVariability.value),
       heightFeet: height.feet,
       heightInches: height.inches,
-      lastRecorded: new Date(),
       peakHeartRate: 0,
       restingHeartRate: Number(data.RestingHeartRate.value),
-      sleepDuration: data.SleepHours.value,
-      stepCount: Number(data.StepsCount.value),
+      sleepHours: data.SleepHours.value,
+      stepsCount: Number(data.StepsCount.value),
       weight: weight.pounds,
+    }
+
+    this.setState(state => {
+      newState.changed = this.findChanges(state, newState)
+      newState.lastRecorded = new Date()
+      return newState
     })
+
+    setInterval(()=> {
+      this.setState(state => {
+        return {...state, changed: new Set()}
+      })
+    }, 2000)
+  }
+
+  // returns the names of the keys where the value has changed from the previous value
+  public findChanges(state: State, newState: State) : Set<string> {
+    const changed = new Set()
+
+    if (newState) {
+      Object.keys(newState).forEach(key => {
+        if (!(key in state) || state[key] !== newState[key]) {
+          changed.add(key)
+        }
+      })
+    }
+
+    return changed
   }
 
   public convertHeight(height: IMeasurement) : {feet: number, inches: number, captured: string} {
@@ -111,30 +138,31 @@ class App extends React.Component<object, State> {
       return bmi
     }
     return 0
-  } 
+  }
 
   public render() {
     return (
       <div className="App" >
-        <img className="img" src={page} />
-        <div className="restingHeartRate">{this.state.restingHeartRate} bpm</div>
-        <div className="peakHeartRate">{this.state.peakHeartRate === 0 ? '' : `${this.state.peakHeartRate} bpm`}</div>
-        <div className="heartRateVariability">{this.state.heartRateVariability} ms</div>
-        <div className="stepCount">{this.state.stepCount} steps</div>
-        <div className="sleepDuration">{this.state.sleepDuration}</div>
+        <img className="img" src={page} />        
+        <Meas name="restingHeartRate" uom="bpm" state={this.state} />
+        <Meas name="peakHeartRate" uom="bpm" state={this.state}/>
+        <Meas name="heartRateVariability" uom="ms" state={this.state} />
+        <Meas name="stepsCount" uom="steps" state={this.state} />
+        <Meas name="sleepHours" state={this.state} />
         <div className="lastRecorded">
           <span>Last recorded:</span>
           <span>{' '}</span>
-          <span><TimeAgo date={this.state.lastRecorded} minPeriod={5}/></span>
+          <TimeAgo date={this.state.lastRecorded} minPeriod={5}/>
         </div>
-        <div className="heightFeet">{this.state.heightFeet}</div>
-        <div className="heightInches">{this.state.heightInches}</div>
-        <div className="weight">{this.state.weight}</div>
-        <div className="bmi">{this.state.bmi}</div>        
-        <div className="heartRate">{this.state.heartRate}</div>
-        <div className="heartRateSource">{this.state.heartRateSource}</div>
+        <Meas name="heightFeet" state={this.state} />
+        <Meas name="heightInches" state={this.state} />
+        <Meas name="weight" state={this.state} />
+        <Meas name="bmi" state={this.state} />
+        <Meas name="heartRate" state={this.state} />
+        <Meas name="heartRateSource" state={this.state} />
+
         <button className="sync" onClick={this.onSync} />
-      </div>       
+      </div>
     )
   }
 }

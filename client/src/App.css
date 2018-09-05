@@ -40,7 +40,7 @@
   font-weight: 500;
 }
 
-.stepCount {
+.stepsCount {
   position: absolute;
   top: 375px;
   left: 184px;  
@@ -50,7 +50,7 @@
   font-weight: 500;
 }
 
-.sleepDuration {
+.sleepHours {
   position: absolute;
   top: 375px;
   left: 418px;  
@@ -149,4 +149,17 @@
   left: 840px;
   opacity: 0;
   cursor: pointer;
+}
+
+@keyframes fade {
+  0% {
+    background-color:yellow;
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+.change {
+  animation: fade 3s;
 }

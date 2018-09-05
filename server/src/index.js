@@ -13,6 +13,7 @@ const io = socket(server)
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname, '../build')));
 
 let obj = {
     DOB: "1961-11-28",
@@ -27,7 +28,7 @@ let obj = {
 // Express routes
 
 app.get('/', (req, res) => {
-  res.send('Yo!')
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
 })
 
 app.get('/values', async (req, res) => {  
