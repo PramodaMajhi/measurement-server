@@ -1,8 +1,9 @@
 {
   "dependencies": {
-    "express": "*",
     "cors": "*",
+    "express": "*",
     "nodemon": "*",
+    "socket.io": "^2.1.1",
     "body-parser": "*"
   },
   "scripts": {

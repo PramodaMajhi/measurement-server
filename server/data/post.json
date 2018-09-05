@@ -24,20 +24,39 @@
   ],
   "measurements": [
     {
-      "measurementValue": "113.85",
-      "unitOfMeasure": "Kg",
-      "endDate": "2018-08-02T23:37:00Z",
-      "startDate": "2018-08-02T23:37:00Z",
-      "measurementType": "Weight",
-      "uuid": "BE15F14C-6A1E-463C-89C3-D38743DD3ED0"
+      "measurementValue": "99.34",
+      "unitOfMeasure": "Kg",      
+      "measurementType": "Weight"
     },
     {
-      "measurementValue": "1.98",
+      "measurementValue": "1.7",
       "unitOfMeasure": "M",
-      "endDate": "2018-08-02T18:50:00Z",
-      "startDate": "2018-08-02T18:50:00Z",
-      "measurementType": "Height",
-      "uuid": "413A667E-63F2-40A2-9510-C02C1EAE9D65"
+      "measurementType": "Height"
+    },
+    {
+      "measurementValue": "21",
+      "unitOfMeasure": "Ms",
+      "measurementType": "HeartRateVariability"
+    },
+    {
+      "measurementValue": "74",
+      "unitOfMeasure": "Bpm",
+      "measurementType": "RestingHeartRate"
+    },
+    {
+      "measurementValue": "7h 20m",
+      "unitOfMeasure": "Hours",
+      "measurementType": "SleepHours"
+    },
+    {
+      "measurementValue": "1539",
+      "unitOfMeasure": "Count",
+      "measurementType": "StepsCount"
+    },
+    {
+      "measurementValue": "84",
+      "unitOfMeasure": "Bpm",
+      "measurementType": "HeartRate"
     }
   ]
 }

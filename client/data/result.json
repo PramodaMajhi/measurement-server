@@ -1,0 +1,42 @@
+{
+    "DOB": "1966-11-11",
+    "BiologicalSex": "Male",
+    "BloodType": "B+",
+    "FitzpatrickSkinType": "II",
+    "WheelchairUse": "no",
+    "Weight": {
+        "value": "99.34",
+        "uom": "Kg",
+        "source": ""
+    },
+    "Height": {
+        "value": "1.70",
+        "uom": "M",
+        "source": ""
+    },
+    "HeartRateVariability": {
+        "value": "21",
+        "uom": "Ms",
+        "source": ""
+    },
+    "RestingHeartRate": {
+        "value": "74",
+        "uom": "Bpm",
+        "source": ""
+    },
+    "SleepHours": {
+        "value": "7h 0m",
+        "uom": "Hour",
+        "source": ""
+    },
+    "StepsCount": {
+        "value": "1539",
+        "uom": "Count",
+        "source": ""
+    },
+    "HeartRate": {
+        "value": "84",
+        "uom": "Bpm",
+        "source": "Apple Watch"
+    }
+}
