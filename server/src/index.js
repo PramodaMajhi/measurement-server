@@ -16,13 +16,46 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '../build')));
 
 let obj = {
-    DOB: "1961-11-28",
+    DOB: "1961-11-27",
     BiologicalSex: "Male",
     BloodType: "A+",
     FitzpatrickSkinType: "I",
     WheelchairUse: "no",
-    Weight: {value: 113.85, uom: "Kg"},
-    Height: {value: 1.98, uom: "M"}
+    Weight: {
+        value: "99.34",
+        uom: "Kg",
+        source: ""
+    },
+    Height: {
+        value: "1.70",
+        uom: "M",
+        source: ""
+    },
+    RestingHeartRate: {
+        value: "81",
+        uom: "bpm",
+        source: ""
+    },
+    HeartRateVariability: {
+        value: "90",
+        uom: "ms",
+        source: ""
+    },
+    StepsCount: {
+        value: "7566",
+        uom: "Count",
+        source: ""
+    },
+    HeartRate: {
+        value: "79",
+        uom: "Bpm",
+        source: "Apple Watch"
+    },
+    SleepHours: {
+        value: "7h 22m",
+        uom: "Ms",
+        source: ""
+    }
 }
 
 // Express routes

@@ -62,24 +62,27 @@ class App extends React.Component<object, State> {
   }
 
   public load(data: IData) {
+    if (! data) {
+      return
+    }
 
     const {heightFeet, heightInches} = this.convertHeight(data.Height)
     const weight = this.convertWeight(data.Weight)
     const bmi = this.calcBMI(data.Weight, data.Height)
-    const {sleepHours, sleepMinutes} = this.parseSleep(data.SleepHours.value)
+    const {sleepHours, sleepMinutes} = this.parseSleep(data.SleepHours)
 
     const newState : any = {
       bmi,
-      heartRate: Number(data.HeartRate.value),
-      heartRateSource: data.HeartRate.source,
-      heartRateVariability: Number(data.HeartRateVariability.value),
+      heartRate: data.HeartRate && data.HeartRate.value ? Number(data.HeartRate.value) : 0,
+      heartRateSource: data.HeartRate && data.HeartRate.source ? data.HeartRate.source : '',
+      heartRateVariability: data.HeartRateVariability && data.HeartRateVariability.value ? Number(data.HeartRateVariability.value) : 0,
       heightFeet,
       heightInches,
       peakHeartRate: 0,
-      restingHeartRate: Number(data.RestingHeartRate.value),
+      restingHeartRate: data.RestingHeartRate && data.RestingHeartRate.value ? Number(data.RestingHeartRate.value) : 0,
       sleepHours,
       sleepMinutes,
-      stepsCount: Number(data.StepsCount.value),
+      stepsCount: data.RestingHeartRate && data.RestingHeartRate.value ? Number(data.StepsCount.value) : 0,
       weight: weight.pounds,
     }
 
@@ -101,7 +104,7 @@ class App extends React.Component<object, State> {
     let heightInches = 0
     let captured = 'n/a'
 
-    if (height && height.uom === 'M') {
+    if (height && height.value && height.uom === 'M') {
       const totalInches = Number(height.value) * 100 / 2.54
       heightFeet = Math.floor(totalInches / 12)
       heightInches = Math.floor(totalInches % 12)
@@ -111,18 +114,17 @@ class App extends React.Component<object, State> {
   }
 
   public convertWeight(weight: IMeasurement) {
-    if (weight) {
-      if (weight.uom === 'Kg') {
-        const pounds = Math.floor(Number(weight.value) * 2.20462)
-        const captured = `${weight.value} Kg`
-        return {pounds, captured}
-      }
+    let pounds = 0
+    let captured = 'n/a'
+    if (weight && weight.value && weight.uom === 'Kg') {
+      pounds = Math.floor(Number(weight.value) * 2.20462)
+      captured = `${weight.value} Kg`        
     }
-    return {pounds: 0, captured: 'n/a'}
+    return {pounds, captured}
   }
 
   public calcBMI(weight: IMeasurement, height: IMeasurement) {
-    if (height && weight && height.uom === 'M' && weight.uom === 'Kg') {            
+    if (height && weight && height.value && weight.value && height.uom === 'M' && weight.uom === 'Kg') {
       let bmi = Number(weight.value) / Math.pow(Number(height.value), 2)
       bmi = Math.round(bmi * 10) / 10
       return bmi
@@ -133,13 +135,15 @@ class App extends React.Component<object, State> {
   // parses "7h 10m"  to {sleepHours: 7, sleepMinutes: 10}
   // parses "7h"      to {sleepHours: 7, sleepMinutes: 0}
   // parses "10m"     to {sleepHours: 0, sleepMinutes: 10}
-  public parseSleep(sleep: string) : {sleepHours: number, sleepMinutes: number} {
+  public parseSleep(sleep: IMeasurement) : {sleepHours: number, sleepMinutes: number} {
     let sleepHours = 0
     let sleepMinutes = 0
-    const match = App.sleepRegEx.exec(sleep)
-    if (match) {
-      sleepHours = Number(match[2] || 0)
-      sleepMinutes = Number(match[4] || 0)
+    if (sleep && sleep.value) {
+      const match = App.sleepRegEx.exec(sleep.value)
+      if (match) {
+        sleepHours = Number(match[2] || 0)
+        sleepMinutes = Number(match[4] || 0)
+      }
     }
     return {sleepHours, sleepMinutes}
   }
