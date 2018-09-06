@@ -1,9 +1,10 @@
 import * as React from 'react'
 import TimeAgo from 'react-timeago'
 import * as io from 'socket.io-client'
+import { Meas } from './components/Measurement'
+import { Sleep } from './components/Sleep'
 import conf from './conf'
 import page from './img/page.png'
-import { Meas } from './Measurement'
 import {IData, IMeasurement} from './models/data'
 
 import './App.css'
@@ -19,7 +20,8 @@ const initialState = {
   lastRecorded: new Date(),
   peakHeartRate: 0,
   restingHeartRate: 0,
-  sleepHours: '----',
+  sleepHours: 0,
+  sleepMinutes: 0,
   stepsCount: 0,
   weight: 0,  
 }
@@ -27,7 +29,7 @@ const initialState = {
 type State = Readonly<typeof initialState>
 
 class App extends React.Component<object, State> {
-
+  private static sleepRegEx = /((\d+)h)?\s*((\d+)m)?/ // 7h 42m
   public readonly state: State = initialState
 
   constructor(props: {}) {
@@ -64,6 +66,7 @@ class App extends React.Component<object, State> {
     const height = this.convertHeight(data.Height)
     const weight = this.convertWeight(data.Weight)
     const bmi = this.calcBMI(data.Weight, data.Height)
+    const {sleepHours, sleepMinutes} = this.parseSleep(data.SleepHours.value)
 
     const newState : any = {
       bmi,
@@ -74,7 +77,8 @@ class App extends React.Component<object, State> {
       heightInches: height.inches,
       peakHeartRate: 0,
       restingHeartRate: Number(data.RestingHeartRate.value),
-      sleepHours: data.SleepHours.value,
+      sleepHours,
+      sleepMinutes,
       stepsCount: Number(data.StepsCount.value),
       weight: weight.pounds,
     }
@@ -90,21 +94,6 @@ class App extends React.Component<object, State> {
         return {...state, changed: new Set()}
       })
     }, 2000)
-  }
-
-  // returns the names of the keys where the value has changed from the previous value
-  public findChanges(state: State, newState: State) : Set<string> {
-    const changed = new Set()
-
-    if (newState) {
-      Object.keys(newState).forEach(key => {
-        if (!(key in state) || state[key] !== newState[key]) {
-          changed.add(key)
-        }
-      })
-    }
-
-    return changed
   }
 
   public convertHeight(height: IMeasurement) : {feet: number, inches: number, captured: string} {
@@ -140,6 +129,35 @@ class App extends React.Component<object, State> {
     return 0
   }
 
+  // parses "7h 10m"  to {sleepHours: 7, sleepMinutes: 10}
+  // parses "7h"      to {sleepHours: 7, sleepMinutes: 0}
+  // parses "10m"     to {sleepHours: 0, sleepMinutes: 10}
+  public parseSleep(sleep: string) : {sleepHours: number, sleepMinutes: number} {
+    let sleepHours = 0
+    let sleepMinutes = 0
+    const match = App.sleepRegEx.exec(sleep)
+    if (match) {
+      sleepHours = Number(match[2] || 0)
+      sleepMinutes = Number(match[4] || 0)
+    }
+    return {sleepHours, sleepMinutes}
+  }
+
+  // returns the names of the keys where the value has changed from the previous value
+  public findChanges(state: State, newState: State) : Set<string> {
+    const changed = new Set()
+
+    if (newState) {
+      Object.keys(newState).forEach(key => {
+        if (!(key in state) || state[key] !== newState[key]) {
+          changed.add(key)
+        }
+      })
+    }
+
+    return changed
+  }
+
   public render() {
     return (
       <div className="App" >
@@ -148,7 +166,7 @@ class App extends React.Component<object, State> {
         <Meas name="peakHeartRate" uom="bpm" state={this.state}/>
         <Meas name="heartRateVariability" uom="ms" state={this.state} />
         <Meas name="stepsCount" uom="steps" state={this.state} />
-        <Meas name="sleepHours" state={this.state} />
+        <Sleep state={this.state} />
         <div className="lastRecorded">
           <span>Last recorded:</span>
           <span>{' '}</span>

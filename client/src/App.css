@@ -5,8 +5,8 @@
 
 .img {
   z-index: -1;
-  width: 1438px;
-  height: 1023px;
+  width: 1441px;
+  height: 1024px;
 }
 
 .restingHeartRate {
@@ -17,7 +17,7 @@
   font-family: Montserrat;
   font-size: 24px;
   font-weight: 500;
-  /*background-color: yellow; border: solid 1px black;*/
+  /* background-color: yellow; border: solid 1px black; */
 }
 
 .peakHeartRate {
@@ -50,7 +50,7 @@
   font-weight: 500;
 }
 
-.sleepHours {
+.sleep {
   position: absolute;
   top: 375px;
   left: 418px;  
@@ -67,86 +67,94 @@
   color: #757C89;
   font-family: Montserrat;
   font-size: 12px;
-  font-style: italic; 
+  font-style: italic;
 }
 
 .heightFeet {
-  width: 45px; 
+  width: 55px;
+  height: 24px; 
   position: absolute;
-  top: 528px;
-  left: 177px;  
+  top: 520px;
+  left: 176px;  
   color: #768594;	
   font-family: Montserrat;	
   font-size: 16px;		
   text-align: right;
-  line-height: 16px;
+  padding-top: 4px;
 }
 
 .heightInches {
-  width: 45px;
+  width: 55px;
+  height: 24px;
   position: absolute;
-  top: 528px;
-  left: 275px;  
+  top: 520px;
+  left: 273px;  
   color: #768594;	
   font-family: Montserrat;	
   font-size: 16px;		
   text-align: right;
-  line-height: 16px;
+  padding-top: 4px;
 }
 
 .weight {
-  width: 45px;
+  width: 55px;
+  height: 24px;
   position: absolute;
-  top: 586px;
-  left: 177px;  
+  top: 579px;
+  left: 176px;  
   color: #768594;	
   font-family: Montserrat;	
   font-size: 16px;		
   text-align: right;
-  line-height: 16px;
+  padding-top: 4px;
 }
 
 .bmi {
-  width: 45px;
+  width: 55px;
+  height: 24px;
   position: absolute;
-  top: 644px;
-  left: 177px;  
+  top: 635px;
+  left: 176px;  
   color: #768594;	
   font-family: Montserrat;	
   font-size: 16px;		
   text-align: right;
-  line-height: 16px;
+  padding-top: 4px;
 }
 
 .heartRate {
-  width: 45px;
+  width: 55px;
+  height: 24px;
   position: absolute;
-  top: 758px;
-  left: 177px;  
+  top: 751px;
+  left: 176px;  
   color: #757C89;
   font-family: Montserrat;
   font-size: 16px;
   text-align: right;
-  line-height: 16px;
+  padding-top: 4px;
 }
 
 .heartRateSource {
+  width: 150px;
+  height: 25px;
   position: absolute;
-  top: 758px;
-  left: 310px;  
+  top: 751px;
+  left: 280px;  
   color: #757C89;
   font-family: Montserrat;
   font-size: 16px;
   text-align: right;
-  line-height: 16px;
+  padding-top: 3px;
+  padding-right: 30px;
 }
 
 .sync {
   position: absolute;
   width: 100px;
-  height: 50px;
-  top: 370px;
+  height: 40px;
   left: 840px;
+  top: 275px;  
   opacity: 0;
   cursor: pointer;
 }
@@ -160,6 +168,6 @@
   }
 }
 
-.change {
+.changed {
   animation: fade 3s;
 }
