@@ -74,8 +74,8 @@
   width: 55px;
   height: 24px; 
   position: absolute;
-  top: 520px;
-  left: 176px;  
+  top: 521px;
+  left: 177px;  
   color: #768594;	
   font-family: Montserrat;	
   font-size: 16px;		
@@ -87,8 +87,8 @@
   width: 55px;
   height: 24px;
   position: absolute;
-  top: 520px;
-  left: 273px;  
+  top: 521px;
+  left: 275px;  
   color: #768594;	
   font-family: Montserrat;	
   font-size: 16px;		
@@ -101,7 +101,7 @@
   height: 24px;
   position: absolute;
   top: 579px;
-  left: 176px;  
+  left: 177px;  
   color: #768594;	
   font-family: Montserrat;	
   font-size: 16px;		
@@ -114,7 +114,7 @@
   height: 24px;
   position: absolute;
   top: 635px;
-  left: 176px;  
+  left: 177px;  
   color: #768594;	
   font-family: Montserrat;	
   font-size: 16px;		
@@ -127,7 +127,7 @@
   height: 24px;
   position: absolute;
   top: 751px;
-  left: 176px;  
+  left: 177px;  
   color: #757C89;
   font-family: Montserrat;
   font-size: 16px;
@@ -136,11 +136,11 @@
 }
 
 .heartRateSource {
-  width: 150px;
+  width: 145px;
   height: 25px;
   position: absolute;
-  top: 751px;
-  left: 280px;  
+  top: 752px;
+  left: 281px;  
   color: #757C89;
   font-family: Montserrat;
   font-size: 16px;

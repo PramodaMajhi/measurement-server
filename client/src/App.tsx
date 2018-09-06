@@ -5,7 +5,7 @@ import { Meas } from './components/Measurement'
 import { Sleep } from './components/Sleep'
 import conf from './conf'
 import page from './img/page.png'
-import {IData, IMeasurement} from './models/data'
+import { IData, IMeasurement } from './models/data'
 
 import './App.css'
 
@@ -63,7 +63,7 @@ class App extends React.Component<object, State> {
 
   public load(data: IData) {
 
-    const height = this.convertHeight(data.Height)
+    const {heightFeet, heightInches} = this.convertHeight(data.Height)
     const weight = this.convertWeight(data.Weight)
     const bmi = this.calcBMI(data.Weight, data.Height)
     const {sleepHours, sleepMinutes} = this.parseSleep(data.SleepHours.value)
@@ -73,8 +73,8 @@ class App extends React.Component<object, State> {
       heartRate: Number(data.HeartRate.value),
       heartRateSource: data.HeartRate.source,
       heartRateVariability: Number(data.HeartRateVariability.value),
-      heightFeet: height.feet,
-      heightInches: height.inches,
+      heightFeet,
+      heightInches,
       peakHeartRate: 0,
       restingHeartRate: Number(data.RestingHeartRate.value),
       sleepHours,
@@ -96,17 +96,18 @@ class App extends React.Component<object, State> {
     }, 2000)
   }
 
-  public convertHeight(height: IMeasurement) : {feet: number, inches: number, captured: string} {
-    if (height) {
-      if (height.uom === 'M') {
-        const totalInches = Number(height.value) * 100 / 2.54
-        const feet = Math.floor(totalInches / 12)
-        const inches = Math.floor(totalInches % 12)
-        const captured = `${height.value} M`
-        return {feet, inches, captured}
-      }
+  public convertHeight(height: IMeasurement) : {heightFeet: number, heightInches: number, captured: string} {
+    let heightFeet = 0
+    let heightInches = 0
+    let captured = 'n/a'
+
+    if (height && height.uom === 'M') {
+      const totalInches = Number(height.value) * 100 / 2.54
+      heightFeet = Math.floor(totalInches / 12)
+      heightInches = Math.floor(totalInches % 12)
+      captured = `${height.value} M`
     }
-    return {feet: 0, inches: 0, captured: 'n/a'}
+    return {heightFeet, heightInches, captured}
   }
 
   public convertWeight(weight: IMeasurement) {
@@ -165,12 +166,12 @@ class App extends React.Component<object, State> {
         <Meas name="restingHeartRate" uom="bpm" state={this.state} />
         <Meas name="peakHeartRate" uom="bpm" state={this.state}/>
         <Meas name="heartRateVariability" uom="ms" state={this.state} />
-        <Meas name="stepsCount" uom="steps" state={this.state} />
+        <Meas name="stepsCount" uom="steps" state={this.state} />        
         <Sleep state={this.state} />
         <div className="lastRecorded">
           <span>Last recorded:</span>
           <span>{' '}</span>
-          <TimeAgo date={this.state.lastRecorded} minPeriod={5}/>
+          <TimeAgo date={this.state.lastRecorded} minPeriod={30}/>
         </div>
         <Meas name="heightFeet" state={this.state} />
         <Meas name="heightInches" state={this.state} />
