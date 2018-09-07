@@ -11,7 +11,7 @@ import './App.css'
 
 const initialState = {
   bmi: 0,
-  changed: new Set<string>(), // the names of the keys that were changed in this state  
+  changeSet: new Set<string>(), // the names of the keys that were changed in this state  
   heartRate: 0,
   heartRateSource: '',
   heartRateVariability: 0,
@@ -92,16 +92,16 @@ class App extends React.Component<object, State> {
     }
 
     this.setState(state => {
-      newState.changed = this.findChanges(state, newState)
+      newState.changeSet = this.findChanges(state, newState)      
       newState.lastRecorded = new Date()
       return newState
     })
 
-    setInterval(()=> {
-      this.setState(state => {
-        return {...state, changed: new Set()}
-      })
-    }, 2000)
+    // clear the changeset, so 'flash' class is removed from all fields,
+    // so they can be flashed next time the change.
+    setTimeout(_ => {
+      this.setState({changeSet: new Set()})
+    }, 2000);
   }
 
   public convertHeight(height: IMeasurement) : {heightFeet: number, heightInches: number, captured: string} {
@@ -155,17 +155,21 @@ class App extends React.Component<object, State> {
 
   // returns the names of the keys where the value has changed from the previous value
   public findChanges(state: State, newState: State) : Set<string> {
-    const changed = new Set()
+    const changeSet = new Set()
 
     if (newState) {
       Object.keys(newState).forEach(key => {
         if (!(key in state) || state[key] !== newState[key]) {
-          changed.add(key)
+          changeSet.add(key)
         }
       })
     }
 
-    return changed
+    if (changeSet.has('heightFeet') || changeSet.has('heightInches')) {
+      changeSet.add('heightFeet').add('heightInches')
+    }
+
+    return changeSet
   }
 
   public render() {

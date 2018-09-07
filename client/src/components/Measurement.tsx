@@ -7,17 +7,19 @@ interface IProps {
     name: string,
     uom?: string,    
     state: {
-      changed: Set<string>,
+      [name: string]: any,
+      changeSet: Set<string>,
       started: boolean
     }
 }
 
-export class Meas extends Component<IProps> {
+export class Meas extends Component<IProps> {  
+
   public render() {
     const {name, uom, state} = this.props
     const value = state[name]
-    const changed = state.changed.has(name)
-    const className = `${name} ${changed ? 'changed' : ''}`
+    const changed = state.changeSet.has(name)    
+    const className = `${name} ${changed ? 'flash' : ''}`
     if (value) {
       // toLocaleString() will add the comma to the step count.
       return (
@@ -34,6 +36,6 @@ export class Meas extends Component<IProps> {
           </div>
       )
     }
-    return (<span />)
+    return (<div className={className} />)
   }
 }

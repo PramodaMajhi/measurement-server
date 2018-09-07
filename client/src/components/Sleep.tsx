@@ -7,7 +7,7 @@ interface IProps {
     state: {
       sleepHours: number,
       sleepMinutes: number,
-      changed: Set<string>,
+      changeSet: Set<string>,
       started: boolean
     }
 }
@@ -16,8 +16,8 @@ export class Sleep extends Component<IProps> {
   public render() {
     const {state} = this.props
     const {sleepHours, sleepMinutes} = state
-    const changed = state.changed.has('sleepHours') || state.changed.has('sleepMinutes')
-    const className = `sleep ${changed ? 'changed' : ''}`
+    const changed = state.changeSet.has('sleepHours') || state.changeSet.has('sleepMinutes')
+    const className = `sleep ${changed ? 'flash' : ''}`
     const list = []
     if (sleepHours || sleepMinutes) {
       list.push(<span key={1}>{sleepHours}</span>)

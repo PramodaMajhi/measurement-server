@@ -168,15 +168,11 @@
   cursor: pointer;
 }
 
-@keyframes fade {
-  0% {
-    background-color:yellow;
-  }
-  100% {
-    background-color: white;
-  }
+@keyframes flash {
+  0% {background-color:yellow;}  
+  100% {background-color: white;}
 }
 
-.changed {
-  animation: fade 3s;
+.flash {
+  animation: flash 2s;
 }
