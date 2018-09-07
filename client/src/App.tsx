@@ -166,17 +166,17 @@ class App extends React.Component<object, State> {
   public render() {
     return (
       <div className="App" >
-        <img className="img" src={page} />        
-        <Meas name="restingHeartRate" uom="bpm" state={this.state} />
-        <Meas name="peakHeartRate" uom="bpm" state={this.state}/>
-        <Meas name="heartRateVariability" uom="ms" state={this.state} />
-        <Meas name="stepsCount" uom="steps" state={this.state} />        
-        <Sleep state={this.state} />
+        <img className="img" src={page} />
         <div className="lastRecorded">
           <span>Last recorded:</span>
           <span>{' '}</span>
           <TimeAgo date={this.state.lastRecorded} minPeriod={30}/>
         </div>
+        <Meas name="restingHeartRate" uom="bpm" state={this.state} />
+        <Meas name="peakHeartRate" uom="bpm" state={this.state}/>
+        <Meas name="heartRateVariability" uom="ms" state={this.state} />
+        <Meas name="stepsCount" uom="steps" state={this.state} />        
+        <Sleep state={this.state} />        
         <Meas name="heightFeet" state={this.state} />
         <Meas name="heightInches" state={this.state} />
         <Meas name="weight" state={this.state} />

@@ -9,6 +9,16 @@
   height: 1024px;
 }
 
+.lastRecorded {
+  position: absolute;
+  top: 204px;
+  left: 195px;
+  color: #757C89;
+  font-family: Montserrat;
+  font-size: 12px;
+  font-style: italic;
+}
+
 .restingHeartRate {
   position: absolute;
   top: 300px;
@@ -58,16 +68,6 @@
   font-family: Montserrat;
   font-size: 24px;
   font-weight: 500;
-}
-
-.lastRecorded {
-  position: absolute;
-  top: 460px;
-  left: 760px;
-  color: #757C89;
-  font-family: Montserrat;
-  font-size: 12px;
-  font-style: italic;
 }
 
 .heightFeet {
