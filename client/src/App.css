@@ -9,6 +9,15 @@
   height: 1024px;
 }
 
+.start {
+  position: absolute;
+  width: 800px;
+  height: 92px;
+  left: 0px;
+  top: 48px;  
+  opacity: 0;
+}
+
 .lastRecorded {
   position: absolute;
   top: 204px;

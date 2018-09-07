@@ -7,7 +7,8 @@ interface IProps {
     state: {
       sleepHours: number,
       sleepMinutes: number,
-      changed: Set<string>
+      changed: Set<string>,
+      started: boolean
     }
 }
 
@@ -18,16 +19,17 @@ export class Sleep extends Component<IProps> {
     const changed = state.changed.has('sleepHours') || state.changed.has('sleepMinutes')
     const className = `sleep ${changed ? 'changed' : ''}`
     const list = []
-    if (sleepHours || sleepMinutes) {      
+    if (sleepHours || sleepMinutes) {
       list.push(<span key={1}>{sleepHours}</span>)
       list.push(<span key={2}className="uom">h</span>)
       if (sleepMinutes) {
         list.push(<span key={3}>{sleepMinutes}</span>)
         list.push(<span key={4}className="uom">m</span>)
       }
-    } else {
+    } else if (state.started) {
       list.push("----")
-    }
+    } // if not started, list is empty
+    
     return (
       <div className={className}>
         {list}

@@ -7,14 +7,15 @@ interface IProps {
     name: string,
     uom?: string,    
     state: {
-      changed: Set<string>
+      changed: Set<string>,
+      started: boolean
     }
 }
 
 export class Meas extends Component<IProps> {
   public render() {
     const {name, uom, state} = this.props
-    const value = state[name]    
+    const value = state[name]
     const changed = state.changed.has(name)
     const className = `${name} ${changed ? 'changed' : ''}`
     if (value) {
@@ -25,12 +26,14 @@ export class Meas extends Component<IProps> {
             <span className="uom">{uom || ''}</span>
         </div>
       )
-    } else {
+    }
+    if (state.started) { 
       return (
-        <div className={className}>
-            ----
-        </div>
+          <div className={className}>
+            ----{'\u2000\u2000'}
+          </div>
       )
-    }    
+    }
+    return (<span />)
   }
 }

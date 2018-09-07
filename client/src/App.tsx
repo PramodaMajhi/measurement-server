@@ -22,6 +22,7 @@ const initialState = {
   restingHeartRate: 0,
   sleepHours: 0,
   sleepMinutes: 0,
+  started: false,
   stepsCount: 0,
   weight: 0,  
 }
@@ -32,12 +33,16 @@ class App extends React.Component<object, State> {
   private static sleepRegEx = /((\d+)h)?\s*((\d+)m)?/ // 7h 42m
   public readonly state: State = initialState
 
-  constructor(props: {}) {
-    super(props)
+  // Connect to the server webSocket and begin receiving updates.
+  // This is intended for a demo so we can begin by showing the blank
+  // fields, then press the hidden start button (over the patient header)
+  // and see the values appear.
+  public onStart = (e: any) => {
     const socket = io(`http://${conf.host}`)
     socket.on("update", (data: IData) => {
       this.load(data)
     })
+    this.setState({started: true})
   }
 
   // When the browser connects to the webSocket, the server sends an update message 
@@ -184,6 +189,7 @@ class App extends React.Component<object, State> {
         <Meas name="heartRate" state={this.state} />
         <Meas name="heartRateSource" state={this.state} />
 
+        <button className="start" onClick={this.onStart} />
         <button className="sync" onClick={this.onSync} />
       </div>
     )
