@@ -176,3 +176,11 @@
 .flash {
   animation: flash 2s;
 }
+
+.err {
+  position: absolute;
+  width: 1180px;
+  height: 26px;
+  left: 100px;
+  top: 1002px;
+}

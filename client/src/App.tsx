@@ -11,7 +11,8 @@ import './App.css'
 
 const initialState = {
   bmi: 0,
-  changeSet: new Set<string>(), // the names of the keys that were changed in this state  
+  changeSet: new Set<string>(), // the names of the keys that were changed in this state
+  error: '',
   heartRate: 0,
   heartRateSource: '',
   heartRateVariability: 0,
@@ -30,41 +31,64 @@ const initialState = {
 type State = Readonly<typeof initialState>
 
 class App extends React.Component<object, State> {
-  private static sleepRegEx = /((\d+)h)?\s*((\d+)m)?/ // 7h 42m
+  private static sleepRegEx = /((\d+)h)?\s*((\d+)m)?/ // Example: '7h 42m'
   public readonly state: State = initialState
 
-  // Connect to the server webSocket and begin receiving updates.
-  // This is intended for a demo so we can begin by showing the blank
-  // fields, then press the hidden start button (over the patient header)
-  // and see the values appear.
+  // During a demo, we can begin by showing the blank fields.
+  // Then, clicking either the sync button or that start button
+  // will call #start which will begin the flow of updates,
+  // which will display the latest values of the fields.
   public onStart = (e: any) => {
-    const socket = io(`http://${conf.host}`)
-    socket.on("update", (data: IData) => {
-      this.load(data)
-    })
-    this.setState({started: true})
+    e.preventDefault()
+    this.start()
   }
 
-  // When the browser connects to the webSocket, the server sends an update message 
-  // with the latest values. If for some reason it does not work, then use the "sync"
-  // button to fetch from the /values endpoint.
-  public componentDidMount() {
-    // this.fetch()
-  }
-
-  // The sync button will also do a fetch
   public onSync = (e: any) => {
     e.preventDefault()
-    this.fetch()
+    this.start()
   }
 
+  // open the web socket and call this.load every time new data is received
+  public start = () => {
+    this.setState(state => {
+      if (! state.started) {
+        try {
+          this.openSocket()
+          return {...state, started: true}
+        } catch (err) {
+          return {...state, error: err.toString()}
+        }
+      }
+      return state
+    })
+  }
+
+  public openSocket() {
+    const socket = io(`http://${conf.host}`);
+    socket.on("connect_error", (error: any) => {
+      this.setState({ error: error.toString() });
+    })
+    socket.on("error", (error: any) => {
+      this.setState({ error: error.toString() });
+    })
+    socket.on("update", (data: IData) => {
+      this.load(data);
+    })
+  }
+
+  /* not used
   public async fetch() {
-    const response = await fetch(`http://${conf.host}/values`)
-    if (response.ok) {
-      const data = await response.json()
-      this.load(data)     
+    try {
+      const response = await fetch(`http://${conf.host}/values`)
+      if (response.ok) {
+        const data = await response.json()
+        this.load(data)
+      }
+    } catch(err) {
+      this.setState({error: err.toString()})
     }
   }
+  */
 
   public load(data: IData) {
     if (! data) {
@@ -92,7 +116,7 @@ class App extends React.Component<object, State> {
     }
 
     this.setState(state => {
-      newState.changeSet = this.findChanges(state, newState)      
+      newState.changeSet = this.findChanges(state, newState)
       newState.lastRecorded = new Date()
       return newState
     })
@@ -104,6 +128,8 @@ class App extends React.Component<object, State> {
     }, 2000);
   }
 
+  // Convert height from Meters to Feet/Inches
+  // Note that the captured height is stored result.captured
   public convertHeight(height: IMeasurement) : {heightFeet: number, heightInches: number, captured: string} {
     let heightFeet = 0
     let heightInches = 0
@@ -118,6 +144,8 @@ class App extends React.Component<object, State> {
     return {heightFeet, heightInches, captured}
   }
 
+  // Convert weight from Kilograms to Pounds
+  // Note that the captured weight is stored in result.captured
   public convertWeight(weight: IMeasurement) {
     let pounds = 0
     let captured = 'n/a'
@@ -128,6 +156,7 @@ class App extends React.Component<object, State> {
     return {pounds, captured}
   }
 
+  // Calculate the BMI
   public calcBMI(weight: IMeasurement, height: IMeasurement) {
     if (height && weight && height.value && weight.value && height.uom === 'M' && weight.uom === 'Kg') {
       let bmi = Number(weight.value) / Math.pow(Number(height.value), 2)
@@ -137,6 +166,7 @@ class App extends React.Component<object, State> {
     return 0
   }
 
+  // Parse string containing 'Xh Ym' to {sleepHours: X, sleepMinutes: Y}
   // parses "7h 10m"  to {sleepHours: 7, sleepMinutes: 10}
   // parses "7h"      to {sleepHours: 7, sleepMinutes: 0}
   // parses "10m"     to {sleepHours: 0, sleepMinutes: 10}
@@ -153,7 +183,7 @@ class App extends React.Component<object, State> {
     return {sleepHours, sleepMinutes}
   }
 
-  // returns the names of the keys where the value has changed from the previous value
+  // Find all of the keys where the values in state and newState are different.
   public findChanges(state: State, newState: State) : Set<string> {
     const changeSet = new Set()
 
@@ -165,6 +195,7 @@ class App extends React.Component<object, State> {
       })
     }
 
+    // if either feet or inches changed, then add them both so they both flash
     if (changeSet.has('heightFeet') || changeSet.has('heightInches')) {
       changeSet.add('heightFeet').add('heightInches')
     }
@@ -195,6 +226,7 @@ class App extends React.Component<object, State> {
 
         <button className="start" onClick={this.onStart} />
         <button className="sync" onClick={this.onSync} />
+        <div className="err">{this.state.error}</div>
       </div>
     )
   }
