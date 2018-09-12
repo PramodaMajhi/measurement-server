@@ -1,3 +1,4 @@
+$(aws ecr get-login --no-include-email --region us-west-2)
 docker build -t measurement-server .
-docker tag measurement-server 627272263172.dkr.ecr.us-east-1.amazonaws.com/measurement-server
-docker push 627272263172.dkr.ecr.us-east-1.amazonaws.com/measurement-server
+docker tag measurement-server:latest 627272263172.dkr.ecr.us-west-2.amazonaws.com/measurement-server:latest
+docker push 627272263172.dkr.ecr.us-west-2.amazonaws.com/measurement-server
