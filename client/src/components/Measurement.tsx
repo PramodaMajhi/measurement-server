@@ -6,10 +6,10 @@ import './Measurement.css'
 interface IProps {
     name: string,
     uom?: string,    
-    state: {
-      [name: string]: any,
-      changeSet: Set<string>,
-      started: boolean
+    state: {      
+      flash: Set<string>,
+      started: boolean,
+      vitals: {[name: string]: any}
     }
 }
 
@@ -17,9 +17,9 @@ export class Meas extends Component<IProps> {
 
   public render() {
     const {name, uom, state} = this.props
-    const value = state[name]
-    const changed = state.changeSet.has(name)    
-    const className = `${name} ${changed ? 'flash' : ''}`
+    const value = state.vitals[name]
+    const flash = state.flash.has(name)    
+    const className = `${name} ${flash ? 'flash' : ''}`
     if (value) {
       // toLocaleString() will add the comma to the step count.
       return (
@@ -29,6 +29,7 @@ export class Meas extends Component<IProps> {
         </div>
       )
     }
+    // The value is zero or empty. If data download has been started, display '---'. Otherwise, nothing.
     if (state.started) { 
       return (
           <div className={className}>

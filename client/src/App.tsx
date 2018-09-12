@@ -9,23 +9,32 @@ import { IData, IMeasurement } from './models/data'
 
 import './App.css'
 
+// when a value in the state (representing a vital - not error, etc.) changes, we want to
+// render the value with a yellow "flash" to draw attention that it has changed. We do this
+// by adding a "flash" class to it. In order to do that, we maintain the "flashUntil" map.
+// The key is the name of the field, and the value is the Unix time in milliseconds when the
+// flash should expire. Anytime the field is rendered, if the current time is less than the 
+// value in flashUntil, the flash class will be added.
+
 const initialState = {
-  bmi: 0,
-  changeSet: new Set<string>(), // the names of the keys that were changed in this state
   error: '',
-  heartRate: 0,
-  heartRateSource: '',
-  heartRateVariability: 0,
-  heightFeet: 0,
-  heightInches: 0,
-  lastRecorded: new Date(),
-  peakHeartRate: 0,
-  restingHeartRate: 0,
-  sleepHours: 0,
-  sleepMinutes: 0,
+  flash: new Set(),
+  lastUpdated: new Date(),
   started: false,
-  stepsCount: 0,
-  weight: 0,  
+  vitals: {
+    bmi: 0,
+    heartRate: 0,
+    heartRateSource: '',
+    heartRateVariability: 0,
+    heightFeet: 0,
+    heightInches: 0,
+    peakHeartRate: 0,
+    restingHeartRate: 0,
+    sleepHours: 0,
+    sleepMinutes: 0,
+    stepsCount: 0,
+    weight: 0,
+  }
 }
 
 type State = Readonly<typeof initialState>
@@ -35,7 +44,7 @@ class App extends React.Component<object, State> {
   public readonly state: State = initialState
 
   // During a demo, we can begin by showing the blank fields.
-  // Then, clicking either the sync button or that start button
+  // Then, clicking either the sync button or the start button
   // will call #start which will begin the flow of updates,
   // which will display the latest values of the fields.
   public onStart = (e: any) => {
@@ -50,17 +59,14 @@ class App extends React.Component<object, State> {
 
   // open the web socket and call this.load every time new data is received
   public start = () => {
-    this.setState(state => {
-      if (! state.started) {
-        try {
-          this.openSocket()
-          return {...state, started: true}
-        } catch (err) {
-          return {...state, error: err.toString()}
-        }
+    if (! this.state.started) {
+      try {
+        this.openSocket()
+        this.setState({started: true})
+      } catch (err) {
+        this.setState({error: err.toString()})
       }
-      return state
-    })
+    }
   }
 
   public openSocket() {
@@ -100,7 +106,7 @@ class App extends React.Component<object, State> {
     const bmi = this.calcBMI(data.Weight, data.Height)
     const {sleepHours, sleepMinutes} = this.parseSleep(data.SleepHours)
 
-    const newState : any = {
+    const vitals : any = {
       bmi,
       heartRate: data.HeartRate && data.HeartRate.value ? Number(data.HeartRate.value) : 0,
       heartRateSource: data.HeartRate && data.HeartRate.source ? data.HeartRate.source : '',
@@ -115,17 +121,32 @@ class App extends React.Component<object, State> {
       weight: weight.pounds,
     }
 
-    this.setState(state => {
-      newState.changeSet = this.findChanges(state, newState)
-      newState.lastRecorded = new Date()
-      return newState
+    const changeSet = this.findChanges(this.state.vitals, vitals)
+
+    // load could be called several times, sometimes a key may be in changeSet and sometimes
+    // it may not be. We don't want the "flash" class to be added and removed from the field
+    // every time the key appears and dissappears from the change set.
+
+    // So, once a key appears in changset, it will be added to flash Set and remain there until
+    // it is removed using the timeout below. Even if the key is not in the next changeset, it will
+    // not be removed from the flash set, as only the timeout removes keys.
+
+    const flash = new Set(this.state.flash)
+    // for each key that changes, add the key to flash and set a timeout to remove it from flash
+    changeSet.forEach(key => {
+      flash.add(key)
+      setTimeout(()=> {
+        const flash2 = new Set(this.state.flash)
+        flash2.delete(key)
+        this.setState({flash: flash2})
+      }, conf.flash)
     })
 
-    // clear the changeset, so 'flash' class is removed from all fields,
-    // so they can be flashed next time the change.
-    setTimeout(_ => {
-      this.setState({changeSet: new Set()})
-    }, 2000);
+    this.setState({
+      flash,
+      lastUpdated: new Date(),
+      vitals
+    })    
   }
 
   // Convert height from Meters to Feet/Inches
@@ -183,13 +204,13 @@ class App extends React.Component<object, State> {
     return {sleepHours, sleepMinutes}
   }
 
-  // Find all of the keys where the values in state and newState are different.
-  public findChanges(state: State, newState: State) : Set<string> {
+  // Find all of the keys where the values in vitals and newVitals are different.
+  public findChanges(vitals: State["vitals"], newVitals: State["vitals"]) : Set<string> {
     const changeSet = new Set()
 
-    if (newState) {
-      Object.keys(newState).forEach(key => {
-        if (!(key in state) || state[key] !== newState[key]) {
+    if (newVitals) {
+      Object.keys(newVitals).forEach(key => {
+        if (!(key in vitals) || vitals[key] !== newVitals[key]) {
           changeSet.add(key)
         }
       })
@@ -200,6 +221,11 @@ class App extends React.Component<object, State> {
       changeSet.add('heightFeet').add('heightInches')
     }
 
+    // if either feet or inches changed, then add them both so they both flash
+    if (changeSet.has('sleepHours') || changeSet.has('sleepMinutes')) {
+      changeSet.add('sleepHours').add('sleepMinutes')
+    }
+
     return changeSet
   }
 
@@ -207,11 +233,18 @@ class App extends React.Component<object, State> {
     return (
       <div className="App" >
         <img className="img" src={page} />
-        <div className="lastRecorded">
-          <span>Last recorded:</span>
-          <span>{' '}</span>
-          <TimeAgo date={this.state.lastRecorded} minPeriod={30}/>
-        </div>
+        {
+          this.state.started 
+          ? (
+              <div className="lastRecorded">
+                <span>Last recorded:</span>
+                <span>{' '}</span>
+                <TimeAgo date={this.state.lastUpdated} minPeriod={10}/>
+              </div>
+            ) 
+          : null
+        }
+
         <Meas name="restingHeartRate" uom="bpm" state={this.state} />
         <Meas name="peakHeartRate" uom="bpm" state={this.state}/>
         <Meas name="heartRateVariability" uom="ms" state={this.state} />

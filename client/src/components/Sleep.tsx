@@ -3,21 +3,23 @@ import {Component} from 'react'
 
 import './Measurement.css'
 
-interface IProps {  
+interface IProps {
     state: {
-      sleepHours: number,
-      sleepMinutes: number,
-      changeSet: Set<string>,
-      started: boolean
+      flash: Set<string>,
+      started: boolean,
+      vitals: {
+        sleepHours: number,
+        sleepMinutes: number,
+      }
     }
 }
 
 export class Sleep extends Component<IProps> {
   public render() {
     const {state} = this.props
-    const {sleepHours, sleepMinutes} = state
-    const changed = state.changeSet.has('sleepHours') || state.changeSet.has('sleepMinutes')
-    const className = `sleep ${changed ? 'flash' : ''}`
+    const {sleepHours, sleepMinutes} = state.vitals
+    const flash = state.flash.has("sleepHours")
+    const className = `sleep ${flash ? 'flash' : ''}`
     const list = []
     if (sleepHours || sleepMinutes) {
       list.push(<span key={1}>{sleepHours}</span>)
