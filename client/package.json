@@ -2,7 +2,10 @@
   "name": "vitals",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {    
+  "dependencies": {
+    "@material-ui/core": "^3.0.3",
+    "@types/material-ui": "^0.21.5",
+    "material-ui": "^0.20.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts-ts": "2.17.0",

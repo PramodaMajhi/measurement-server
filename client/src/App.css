@@ -2,7 +2,58 @@
   display: flex;
   flex-direction: column;
 }
+.container {
+display: flex;
+flex-direction: column;
+}
 
+.sec1 {
+  
+}
+.sec2 {
+  display: flex;
+  border: 1px solid;
+  margin: -5px 0 0;
+  border-radius: 5px;
+  background-color: #fff;
+  border: 1px solid #dce6f2;
+  
+}
+.sec3 {
+  
+}
+.sec4 {
+  
+}
+.row1 {
+  display: flex;  
+  align-items: center;
+  justify-content: space-between;
+}
+.row2 {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-wrap: wrap;
+  width: 75%;
+}
+.ActualData {
+
+}
+.vitalsSec div {
+ 
+}
+.vitalsSec {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .img {
   z-index: -1;
   width: 1441px;
@@ -19,9 +70,10 @@
 }
 
 .lastRecorded {
-  position: absolute;
+ /* position: absolute;
   top: 204px;
   left: 195px;
+  */
   color: #757C89;
   font-family: Montserrat;
   font-size: 12px;
