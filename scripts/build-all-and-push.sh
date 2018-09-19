@@ -26,6 +26,6 @@ cd ..
 echo "done"
 
 echo "tagging and pushing to AWS repository"
-docker tag measurement-server:latest 627272263172.dkr.ecr.us-west-2.amazonaws.com/measurement-server:latest
-docker push 627272263172.dkr.ecr.us-west-2.amazonaws.com/measurement-server
+docker tag measurement-server:latest 467141366916.dkr.ecr.us-west-2.amazonaws.com/measurement-server:latest
+docker push 467141366916.dkr.ecr.us-west-2.amazonaws.com/measurement-server:latest
 echo "done"
