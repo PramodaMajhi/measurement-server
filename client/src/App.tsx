@@ -70,8 +70,8 @@ class App extends React.Component<object, State> {
   }
 
   public openSocket() {
-    // const socket = io();
-    const socket = io(`http://${conf.host}`);
+    const socket = io();
+    // const socket = io(`http://${conf.host}`);
     socket.on("connect_error", (error: any) => {
       this.setState({ error: error.toString() });
     })
