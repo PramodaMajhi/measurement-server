@@ -12,6 +12,7 @@ If not, follow the instructions [here](https://docs.aws.amazon.com/cli/latest/us
 
 To do that, follow the instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
 
+
 ## Build
 
 The following script:
@@ -42,3 +43,19 @@ tagging and pushing to AWS repository
 latest: digest: sha256: [...] size: [...]
 done
 ```
+## Deloy
+1. login to https://aws.amazon.com/console/
+2. Enter account ID#
+3. IM user name
+4. password
+5. click on sign in
+6. Change  to US-West (Oregon)
+6. Click on elastic container services
+7. then Click on Cluster 
+8. Default >
+9. custom-service
+10. Update
+11. Do not forget to check "Force new Deployment"
+12. then "Next steps" then Update
+13. Wait for a minute to primary became running count to 1
+14. Launch the app using URL:  http://ec2co-ecsel-1btpzrrnkdqrn-1571469319.us-west-2.elb.amazonaws.com/ 
