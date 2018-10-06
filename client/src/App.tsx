@@ -4,7 +4,7 @@ import * as io from 'socket.io-client'
 import { Meas } from './components/Measurement'
 import { Sleep } from './components/Sleep'
 import conf from './conf'
-import page from './img/page.png'
+import page from './img/VitalsNotFilled@2x.png'
 import { IData, IMeasurement } from './models/data'
 
 import './App.css'
@@ -70,7 +70,8 @@ class App extends React.Component<object, State> {
   }
 
   public openSocket() {
-    const socket = io();
+    // const socket = io();
+    const socket = io(`http://${conf.host}`);
     socket.on("connect_error", (error: any) => {
       this.setState({ error: error.toString() });
     })
@@ -246,16 +247,16 @@ class App extends React.Component<object, State> {
         }
 
         <Meas name="restingHeartRate" uom="bpm" state={this.state} />
-        <Meas name="peakHeartRate" uom="bpm" state={this.state}/>
+      { /*<Meas name="peakHeartRate" uom="bpm" state={this.state}/> */}
         <Meas name="heartRateVariability" uom="ms" state={this.state} />
         <Meas name="stepsCount" uom="steps" state={this.state} />        
         <Sleep state={this.state} />        
-        <Meas name="heightFeet" state={this.state} />
+        { /*<Meas name="heightFeet" state={this.state} />
         <Meas name="heightInches" state={this.state} />
         <Meas name="weight" state={this.state} />
         <Meas name="bmi" state={this.state} />
-        <Meas name="heartRate" state={this.state} />
-        <Meas name="heartRateSource" state={this.state} />
+      <Meas name="heartRateSource" state={this.state} /> */}
+      <Meas name="heartRate" state={this.state} />
 
         <button className="start" onClick={this.onStart} />
         <button className="sync" onClick={this.onSync} />

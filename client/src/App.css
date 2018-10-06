@@ -13,15 +13,19 @@
   position: absolute;
   width: 800px;
   height: 92px;
-  left: 0px;
-  top: 48px;  
+  /* left: 0px;
+  top: 48px;   */
+  left: 233px;
+  top: 188px;
   opacity: 0;
 }
 
 .lastRecorded {
   position: absolute;
-  top: 204px;
-  left: 195px;
+  /* top: 204px;
+  left: 195px; */
+  top: 290px;
+  left: 950px;
   color: #757C89;
   font-family: Montserrat;
   font-size: 12px;
@@ -30,8 +34,10 @@
 
 .restingHeartRate {
   position: absolute;
-  top: 300px;
-  left: 184px;
+  /* top: 300px;
+  left: 184px; */
+  top: 430px;
+  left: 840px;
   color: #757C89;
   font-family: Montserrat;
   font-size: 24px;
@@ -51,8 +57,10 @@
 
 .heartRateVariability {
   position: absolute;
-  top: 300px;
-  left: 655px;  
+  /* top: 300px;
+  left: 655px;   */
+  top: 430px;
+  left: 989px;
   color: #757C89;
   font-family: Montserrat;
   font-size: 24px;
@@ -61,8 +69,10 @@
 
 .stepsCount {
   position: absolute;
-  top: 375px;
-  left: 184px;  
+  /* top: 375px;
+  left: 184px;   */
+  top: 480px;
+  left: 840px;
   color: #757C89;
   font-family: Montserrat;
   font-size: 24px;
@@ -71,8 +81,10 @@
 
 .sleep {
   position: absolute;
-  top: 375px;
-  left: 418px;  
+  /* top: 375px;
+  left: 418px;   */
+  top: 480px;
+  left: 989px;
   color: #757C89;
   font-family: Montserrat;
   font-size: 24px;
@@ -132,16 +144,21 @@
 }
 
 .heartRate {
-  width: 55px;
-  height: 24px;
+  /* width: 55px;
+  height: 24px; */
+  width: 60px;
+  height: 45px;
   position: absolute;
-  top: 751px;
-  left: 177px;  
-  color: #757C89;
+  /* top: 751px;
+  left: 177px;   */
+  top: 745px;
+  left: 1140px;
+  color: #eaebef;
   font-family: Montserrat;
-  font-size: 16px;
+  font-size: 40px;
   text-align: right;
   padding-top: 4px;
+  font-weight: 600;
 }
 
 .heartRateSource {
@@ -160,10 +177,10 @@
 
 .sync {
   position: absolute;
-  width: 100px;
+  width: 45px;
   height: 40px;
-  left: 840px;
-  top: 275px;  
+  left: 835px;
+  top: 325px; 
   opacity: 0;
   cursor: pointer;
 }
