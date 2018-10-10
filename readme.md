@@ -43,7 +43,7 @@ tagging and pushing to AWS repository
 latest: digest: sha256: [...] size: [...]
 done
 ```
-## Deloy
+## Deloy to AWS
 1. login to https://aws.amazon.com/console/
 2. Enter account ID#
 3. IM user name

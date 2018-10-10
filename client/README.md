@@ -2446,3 +2446,14 @@ In the future, we might start automatically compiling incompatible third-party m
 ## Something Missing?
 
 If you have ideas for more “How To” recipes that should be on this page, [let us know](https://github.com/facebookincubator/create-react-app/issues) or [contribute some!](https://github.com/facebookincubator/create-react-app/edit/master/packages/react-scripts/template/README.md)
+
+
+## How to run in local machine ?
+1. Download/Clone the code from git repository
+2. go to "client" directory
+3. Ensure npm, typescript and express server installed in your machine
+4. Run command "npm run start" 
+5. Open App.tsx and comment
+   // const socket = io(); // This ucomment before deployment
+     const socket = io(`http://${conf.host}`); // This should commented before deployment
+  Above  code changes reguired because client and sever in same machine.

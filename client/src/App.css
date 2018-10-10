@@ -146,7 +146,7 @@
 .heartRate {
   /* width: 55px;
   height: 24px; */
-  width: 60px;
+  width: 55px;
   height: 45px;
   position: absolute;
   /* top: 751px;
@@ -186,8 +186,8 @@
 }
 
 @keyframes flash {
-  0% {background-color:yellow;}
-  60% {background-color: yellow;}  
+  0% {background-color:orange;}
+  60% {background-color: orange;}  
   100% {background-color: white;}
 }
 
