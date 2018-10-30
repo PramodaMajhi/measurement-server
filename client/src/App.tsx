@@ -4,7 +4,7 @@ import * as io from 'socket.io-client'
 import { Meas } from './components/Measurement'
 import { Sleep } from './components/Sleep'
 import conf from './conf'
-import page from './img/VitalsNotFilled@2x.png'
+import page from './img/VitalsNotFillednew@2x.png'
 import { IData, IMeasurement } from './models/data'
 
 import './App.css'
@@ -70,8 +70,8 @@ class App extends React.Component<object, State> {
   }
 
   public openSocket() {
-    const socket = io();
-    // const socket = io(`http://${conf.host}`);
+    const socket = io(); // this for deployment
+     // const socket = io(`http://${conf.host}`); // un comment this for local
     socket.on("connect_error", (error: any) => {
       this.setState({ error: error.toString() });
     })
